@@ -1,0 +1,177 @@
+{% extends 'layout.html' %}
+
+{% block scripts %}
+	<!-- <script type="text/javascript" src="{{ url_for('static', filename = 'Search.js') }}"></script> -->
+
+
+	<style type="text/css">
+	.topbar{
+/*	background-image: linear-gradient(135deg, rgb(5, 9, 34), rgb(80, 200, 170) 75%);*/
+	padding: 3%;
+	margin-bottom: 0;
+	color: white;
+	}
+	input{
+    width:100%;
+    border-radius: 15px 15px 15px 15px;
+	}
+	.bold{
+		font-weight: bold;
+	}
+	.wrap{
+ 		position: relative;
+ 		margin-left: 4%;
+
+	}
+	.wrap a{
+	  /*position: absolute;*/
+	  width:100%;
+	  height:100%;
+	  text-decoration: none;
+	}
+/*	.card{
+		margin-left: 10%;
+	}*/
+
+	.HOVER:hover {
+		-webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+		-moz-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+		box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+}
+
+
+	</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- <h1>Search Engine </h1> -->
+<div class="container" style="padding:0;">
+
+	<div class="topbar">
+		<h1>Browse</h1>
+		<h6> Genres & Moods</h6>
+		<hr style="border-top: 2px  solid rgba(250,250,250,0.1)">
+	</div>
+
+
+
+	<!-- start -->
+
+
+	<div class="row " style="margin-bottom: 5%;">
+
+		<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3 HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+
+		<!-- <div class="col-md-1"></div> -->
+
+		<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3 HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+
+		<!-- <div class="col-md-1"></div> -->
+
+
+				<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3  HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+		<!--  -->
+
+
+	</div>
+
+
+
+	<div class="row" style="margin-bottom: 5%;">
+
+		<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3 HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+
+		<!-- <div class="col-md-1"></div> -->
+
+		<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3 HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+
+		<!-- <div class="col-md-1"></div> -->
+
+
+				<div class="wrap col">
+			<a href="/Search">
+				<div class="card text-white bg-secondary mb-3  HOVER" style="max-width: 18rem;">
+				  <div class="card-header">Header</div>
+				  <div class="card-body">
+				    <h5 class="card-title">Secondary card title</h5>
+				    <p class="card-text">Quick sample text to create the card title and make up the body of the card's content.</p>
+				  </div>
+				</div>
+			</a>
+		</div>
+		<!--  -->
+
+
+	</div>
+
+
+
+
+
+
+
+
+	<!-- end -->
+
+
+
+
+
+
+
+
+
+</div>
+
+{% endblock %}

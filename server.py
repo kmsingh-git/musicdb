@@ -13,9 +13,19 @@ import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response
+from flask import render_template
+from flask import jsonify
+
+
+
+
+
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
+
+
+
 
 
 #
@@ -30,6 +40,30 @@ app = Flask(__name__, template_folder=tmpl_dir)
 #     DATABASEURI = "postgresql://gravano:foobar@35.243.220.243/proj1part2"
 #
 DATABASEURI = "postgresql://ncc2137:3749@35.231.103.173/proj1part2"
+
+
+
+
+# delete database array below later
+database = [
+  {
+  "id": 0,
+  "Name": "Tom Brady",
+  "Team": "New England Patriots",
+  "Bio": "Thomas Edward Patrick Brady Jr. (bord August 3, 1997) is an American footbal quarterback for the New England Patriots of the National Football League (NFL). He has won six Super Bowls, the most of any football player ever. Due to his various accomplishments and records, he is considered by fans and soprts analysts to be the G.O.A.T (greatest of all time).",
+  "Rating": 97.7,
+  "Height": "6-4",
+  "Weight": "225 lbs",
+  "Age": 41,
+  "Experience": "20th season",
+  "pic":"http://static.nfl.com/static/content/public/static/img/fantasy/transparent/200x200/BRA371156.png"
+
+  },
+  ]
+
+Lookup_matches=[
+
+]
 
 
 #
@@ -108,10 +142,10 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
+  cursor = g.conn.execute("SELECT title FROM song")
   names = []
   for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
+    names.append(result['title'])  # can also be accessed using result[0]
   cursor.close()
 
   #
@@ -174,6 +208,53 @@ def add():
 def login():
     abort(401)
     this_is_never_executed()
+
+
+# Added code
+@app.route('/Search')
+def Search(database=database):
+    return render_template('Search.html', database=database)
+
+@app.route('/match', methods=['GET', 'POST'])
+def match():
+  global database
+  global Lookup_matches
+  Lookup_matches.clear()
+  json_data = request.get_json()
+  Lookup=json_data["Lookup"]
+  x=0;
+  while (x<len(database)):
+    if Lookup.lower() in database[x]["Name"].lower():
+      Lookup_matches.append(database[x]);
+    elif Lookup.lower() in database[x]["Team"].lower():
+      Lookup_matches.append(database[x]);
+    elif Lookup.lower() in database[x]["Bio"].lower():
+      Lookup_matches.append(database[x]);
+    elif str(Lookup) in str(database[x]["Rating"]):
+      Lookup_matches.append(database[x]);
+    elif Lookup in database[x]["Height"]:
+      Lookup_matches.append(database[x]);
+    elif Lookup in database[x]["Weight"]:
+      Lookup_matches.append(database[x]);
+    elif str(Lookup) in str(database[x]["Age"]):
+      Lookup_matches.append(database[x]);
+    elif Lookup in database[x]["Experience"]:
+      Lookup_matches.append(database[x]);
+    x=x+1;
+  return jsonify(Lookup_matches = Lookup_matches)
+
+
+@app.route('/Home')
+def Home():
+    return render_template('Home.html')
+
+@app.route('/Browse')
+def Browse():
+    return render_template('Browse.html')
+
+@app.route('/Playlists')
+def Playlists():
+    return render_template('Playlists.html')
 
 
 if __name__ == "__main__":
