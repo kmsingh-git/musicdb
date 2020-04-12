@@ -7,10 +7,10 @@ var display = function(searched_database){
     var column1h = $("<div class = 'col-md-3 bold'>")
     var column2h = $("<div class = 'col-md-3 bold'>")
     var column3h = $("<div class = 'col-md-3 bold'>")
-    $(columnh).append("Player")
-    $(column1h).append("Team")
-    $(column2h).append("Age")
-    $(column3h).append("Rating")
+    $(columnh).append("Username")
+    $(column1h).append("Name")
+    $(column2h).append("Date of Joining")
+    $(column3h).append("Date of Birth")
     $(rowh).append(columnh)
     $(rowh).append(column1h)
     $(rowh).append(column2h)
@@ -28,7 +28,7 @@ var display = function(searched_database){
             var data_to_save = {"x":identify}
             $.ajax({
                 type: "POST",
-                url: "info",                
+                url: "info",
                 dataType : "json",
                 contentType: "application/json; charset=utf-8",
                 data : JSON.stringify(data_to_save),
@@ -57,10 +57,10 @@ var display = function(searched_database){
             var column2 = $("<div class = 'col-md-3'>")
             var column3 = $("<div class = 'col-md-3'>")
 
-            $(column).append(value[x]["Name"])
-            $(column1).append(value[x]["Team"])
-            $(column2).append(value[x]["Age"])
-            $(column3).append(value[x]["Rating"])
+            $(column).append(value[x]["username"])
+            $(column1).append(value[x]["name"])
+            $(column2).append(value[x]["date_of_joining"])
+            $(column3).append(value[x]["date_of_birth"])
 
             $(row).append(column)
             $(row).append(column1)
@@ -82,16 +82,12 @@ var display = function(searched_database){
 }
 
 
-var search_Lookup = function(Lookup){ 
-    var data_to_save = {"Lookup":Lookup}
-    $.ajax({
-        type: "POST",
-        url: "match",                
-        dataType : "json",
-        contentType: "application/json; charset=utf-8",
-        data : JSON.stringify(data_to_save),
+var search_Lookup = function(artist_id){
+   $.ajax({
+        type: "GET",
+        url: "get_artist_details?artist_id=" + artist_id,
         success: function(result){
-            // console.log(result)
+            console.log("results\n" + result)
             display(result)
 
         },
@@ -108,21 +104,20 @@ var search_Lookup = function(Lookup){
 var search_input = function ()
 {
     var Lookup = $("#Search").val()
-    $("#Search").attr("placeholder", "Search...").val("")
-    // console.log(Lookup)
+    $("#Search").attr("placeholder", "artist_id").val("")
     search_Lookup(Lookup)
-    
+
 }
 
 
 $(document).ready(function(){
     //when the page loads, display all the names
-    $(".add_link").click(function(){  
+    $(".add_link").click(function(){
         window.location.href="/Add_item"
     })
     $("#Button").click(function(){
-        console.log("TRIGGGG")
+        console.log("TRIG")
         search_input()
     })
-   
+
 })

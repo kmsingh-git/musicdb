@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block scripts %}
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'Search_Artist_K.js') }}"></script>
+
+	<style type="text/css">
+	.topbar{
+/*	background-image: linear-gradient(135deg, rgb(5, 9, 34), rgb(80, 200, 170) 75%);*/
+	padding: 3%;
+	margin-bottom: 2%;
+	color: white;
+	}
+	input{
+    width:10%;
+    border-radius: 15px 15px 15px 15px;
+	}
+	.bold{
+		font-weight: bold;
+	}
+	</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- <h1>Search Engine </h1> -->
+
+
+<div class="container" style="padding:0;">
+
+	<div class="topbar">
+		<h1>Search Artists</h1>
+		<hr style="border-top: 2px  solid rgba(250,250,250,0.1)">
+	</div>
+
+
+	<div class="input-group mb-3" style="margin-left: 5%; margin-right: 5%;">
+	  <input type="text" class="form-control" placeholder="artist_id" id ="Search">
+	  <div class="input-group-append">
+	    <button class="btn btn-outline-secondary" type="button" id="Button">Search</button>
+	  </div>
+	</div>
+	<br>
+	<div id="add">
+	</div>
+</div>
+
+{% endblock %}

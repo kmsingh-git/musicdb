@@ -256,6 +256,84 @@ def Browse():
 def Playlists():
     return render_template('Playlists.html')
 
+"""
+GET FUNCTIONALITY - Kanak's code
+"""
+
+@app.route('/search_artist')
+def search_artist_k():
+    return render_template('Search_Artist_K.html')
+
+@app.route('/search_song')
+def search_song_k():
+    return render_template('Search_Song_K.html')
+
+@app.route('/search_album')
+def search_album_k():
+    return render_template('Search_Album_K.html')
+
+@app.route('/search_playlist')
+def search_playlist_k():
+    return render_template('Search_Playlist_K.html')
+
+@app.route('/search_user')
+def search_user_k():
+    return render_template('Search_User_K.html')
+
+"""
+Query Methods - Kanak's code
+"""
+
+@app.route('/get_artist_details', methods=['GET'])
+def get_artist_details_k():
+  artist_id = int(request.args['artist_id'])
+  cursor = g.conn.execute("SELECT * FROM artist where artist_id={};".format(artist_id))
+  artists = []
+  for result in cursor:
+    artists.append({
+      'username': result['username'],
+      'name': result['name'],
+      'date_of_joining': result['date_of_joining'],
+      'date_of_birth': result['date_of_birth']
+    })
+  cursor.close()
+
+  return jsonify(Lookup_matches=artists)
+
+@app.route('/get_song_details', methods=['GET'])
+def get_song_details_k():
+  song_id = request.args["song_id"]
+  #Query
+  #return
+
+@app.route('/get_album_details', methods=['GET'])
+def get_album_details_k():
+  album_id = int(request.args["album_id"])
+  cursor = g.conn.execute("select id, album_name, total_length, artist.name as artist_name, any_explicit from (select album.album_id as id, min(name) as album_name, sum(time) as total_length, bool_or(explicit) as any_explicit from songalbum, song, album where songalbum.song_id = song.song_id and album.album_id = songalbum.album_id and album.album_id = {} group by album.album_id) as foo, albumartist, artist where albumartist.album_id = foo.id and artist.artist_id = albumartist.artist_id;".format(album_id))
+  albums = []
+  for result in cursor:
+    albums.append({
+      'album_name': result['album_name'],
+      'artist_name': result['artist_name'],
+      'total_length': str(result['total_length']),
+      'any_explicit': str(result['any_explicit'])
+    })
+  ## IF THERE ARE MULTIPLE ARTISTS THIS WILL RETURN MULTIPLE ROWS
+  cursor.close()
+
+  return jsonify(Lookup_matches=albums)
+
+@app.route('/get_playlist_details', methods=['GET'])
+def get_playlist_details_k():
+  playlist_id = request.args["playlist_id"]
+  #Query
+  #return
+
+@app.route('/get_user_details', methods=['GET'])
+def get_user_details_k():
+  user_id = request.args["user_id"]
+  #Query
+  #return
 
 if __name__ == "__main__":
   import click
