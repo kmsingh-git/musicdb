@@ -116,7 +116,6 @@ $(document).ready(function(){
         window.location.href="/Add_item"
     })
     $("#Button").click(function(){
-        console.log("TRIG")
         search_input()
     })
 

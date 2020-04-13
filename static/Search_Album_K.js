@@ -8,7 +8,7 @@ var display = function(searched_database){
     var column2h = $("<div class = 'col-md-3 bold'>")
     var column3h = $("<div class = 'col-md-3 bold'>")
     $(columnh).append("Album Name")
-    $(column1h).append("Artist Name")
+    $(column1h).append("Artist Names (string_agg function ;))")
     $(column2h).append("Total Length")
     $(column3h).append("Any Explicit tracks?")
     $(rowh).append(columnh)
@@ -58,7 +58,7 @@ var display = function(searched_database){
             var column3 = $("<div class = 'col-md-3'>")
 
             $(column).append(value[x]["album_name"])
-            $(column1).append(value[x]["artist_name"])
+            $(column1).append(value[x]["artist_names"])
             $(column2).append(value[x]["total_length"])
             $(column3).append(value[x]["any_explicit"])
 
@@ -116,7 +116,6 @@ $(document).ready(function(){
         window.location.href="/Add_item"
     })
     $("#Button").click(function(){
-        console.log("TRIG")
         search_input()
     })
 

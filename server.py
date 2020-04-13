@@ -297,43 +297,93 @@ def get_artist_details_k():
       'date_of_birth': result['date_of_birth']
     })
   cursor.close()
-
   return jsonify(Lookup_matches=artists)
+
 
 @app.route('/get_song_details', methods=['GET'])
 def get_song_details_k():
-  song_id = request.args["song_id"]
-  #Query
-  #return
+  song_id = int(request.args["song_id"])
+  cursor = g.conn.execute(
+      "select song.song_id, min(song.title) as title, string_agg(artist.name, ', ') as artist_names, min(album.name) "
+      "as album_name, min(audio_file_link) as audio_file_link from song, songalbum, albumartist, artist, album where "
+      "song.song_id = songalbum.song_id and songalbum.album_id = album.album_id and songalbum.album_id = "
+      "albumartist.album_id and albumartist.artist_id = artist.artist_id and song.song_id = {} group by "
+      "song.song_id;".format(
+          song_id))
+  songs = []
+  for result in cursor:
+    songs.append({
+      'title': result['title'],
+      'audio_file_link': result['audio_file_link'],
+      'album_name': result['album_name'],
+      'artist_names': result['artist_names']
+    })
+  ## IF THERE ARE MULTIPLE ARTISTS THIS WILL RETURN MULTIPLE ROWS
+  cursor.close()
+  return jsonify(Lookup_matches=songs)
 
 @app.route('/get_album_details', methods=['GET'])
 def get_album_details_k():
   album_id = int(request.args["album_id"])
-  cursor = g.conn.execute("select id, album_name, total_length, artist.name as artist_name, any_explicit from (select album.album_id as id, min(name) as album_name, sum(time) as total_length, bool_or(explicit) as any_explicit from songalbum, song, album where songalbum.song_id = song.song_id and album.album_id = songalbum.album_id and album.album_id = {} group by album.album_id) as foo, albumartist, artist where albumartist.album_id = foo.id and artist.artist_id = albumartist.artist_id;".format(album_id))
+  cursor = g.conn.execute(
+      "select id, min(album_name) as album_name, min(total_length) as total_length, string_agg(artist.name, ', "
+      "') as artist_names, bool_and(any_explicit) as any_explicit from (select album.album_id as id, min(name) as "
+      "album_name, sum(time) as total_length, bool_or(explicit) as any_explicit from songalbum, song, album where "
+      "songalbum.song_id = song.song_id and album.album_id = songalbum.album_id and album.album_id = {} group by "
+      "album.album_id) as foo, albumartist, artist where albumartist.album_id = foo.id and artist.artist_id = "
+      "albumartist.artist_id group by id;".format(
+          album_id))
   albums = []
   for result in cursor:
     albums.append({
       'album_name': result['album_name'],
-      'artist_name': result['artist_name'],
+      'artist_names': result['artist_names'],
       'total_length': str(result['total_length']),
       'any_explicit': str(result['any_explicit'])
     })
-  ## IF THERE ARE MULTIPLE ARTISTS THIS WILL RETURN MULTIPLE ROWS
   cursor.close()
-
   return jsonify(Lookup_matches=albums)
 
 @app.route('/get_playlist_details', methods=['GET'])
 def get_playlist_details_k():
-  playlist_id = request.args["playlist_id"]
-  #Query
-  #return
+  playlist_id = int(request.args["playlist_id"])
+  cursor = g.conn.execute(
+      "select playlist.playlist_id, min(name) as playlist_name, string_agg(song.title, ', ') as song_names, "
+      "cast(min(date_of_creation) as text) as date_of_creation, private from playlist, songplaylist, song where "
+      "playlist.playlist_id = "
+      "songplaylist.playlist_id and song.song_id = songplaylist.song_id and playlist.playlist_id = {} group by "
+      "playlist.playlist_id;".format(
+          playlist_id))
+  playlists = []
+  for result in cursor:
+      playlists.append({
+          'playlist_name': result['playlist_name'],
+      'song_names': result['song_names'],
+      'date_of_creation': str(result['date_of_creation']),
+      'private': str(result['private'])
+    })
+  cursor.close()
+  return jsonify(Lookup_matches=playlists)
 
 @app.route('/get_user_details', methods=['GET'])
 def get_user_details_k():
-  user_id = request.args["user_id"]
-  #Query
-  #return
+  user_id = int(request.args["user_id"])
+  cursor = g.conn.execute(
+      "select u.name, min(username) as username, cast(min(date_of_joining) as text) as date_of_joining, string_agg("
+      "foo.artist_name, ', ') as artists_followed from user_account u left outer join (select ufa.user_id as user_id, "
+      "ufa.artist_id as artist_id, a.name as artist_name from userfollowartist ufa, artist a where ufa.artist_id = "
+      "a.artist_id) as foo on u.user_id = foo.user_id where u.user_id = {} group by u.user_id;".format(
+          user_id))
+  users = []
+  for result in cursor:
+      users.append({
+          'name': result['name'],
+          'username': result['username'],
+          'date_of_joining': result['date_of_joining'],
+          'artists_followed': result['artists_followed']
+      })
+  cursor.close()
+  return jsonify(Lookup_matches=users)
 
 if __name__ == "__main__":
   import click
